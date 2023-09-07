@@ -1,21 +1,20 @@
 package client
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"os"
 
+	"github.com/cgaspart/blackjack/utils"
 	"github.com/gorilla/websocket"
 )
 
-func Client(ip string) {
-	reader := bufio.NewReader(os.Stdin)
+func login() {
 	fmt.Print("Enter your nickname: ")
-	nickname, _ := reader.ReadString('\n')
 
-	// Remove newline character from the input
-	nickname = nickname[:len(nickname)-1]
+	userName := utils.GetUserInput()
+}
+
+func Client(ip string) {
 
 	serverAddr := "ws://" + ip + "/ws" // Change to your server's address
 	fmt.Println(serverAddr)

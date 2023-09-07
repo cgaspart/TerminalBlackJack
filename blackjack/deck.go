@@ -56,6 +56,16 @@ func (d *Deck) Deal() Card {
 	return card
 }
 
+func printHand(hand []Card) string {
+	var message string
+
+	for _, card := range hand {
+		message = message + fmt.Sprintln(card.CardArt)
+	}
+
+	return message
+}
+
 func cardValue(deck []Card) (int, int) {
 	var value int
 	ace := false
