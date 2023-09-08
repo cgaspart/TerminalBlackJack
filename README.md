@@ -23,13 +23,10 @@ To get started with TerminalBlackJack, follow these steps:
    cd TerminalBlackJack
    go build
 
-2. Run the server:
+2. Run TerminalBlackJack
    ```bash
    ./TerminalBlackJack
-3. Follow the on-screen instructions to run the server
-4. Join as player
-   ```bash
-   ./TerminalBlackJack
+2. Follow the on-screen instructions 
 
 ## Gameplay
 
