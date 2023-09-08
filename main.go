@@ -1,56 +1,36 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/cgaspart/blackjack/client"
 	"github.com/cgaspart/blackjack/server"
+	"github.com/cgaspart/blackjack/utils"
 )
 
 func main() {
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Run 1) server 2) client: ")
-	option, _ := reader.ReadString('\n')
+	fmt.Println("Welcome to Blackjack Terminal Game!")
+	fmt.Println("Please choose an option:")
+	fmt.Println("1. Join a Game")
+	fmt.Println("2. Host a Game")
+	fmt.Println("3. Quit")
+	for {
+		option := utils.GetUserInput("")
 
-	option = option[:len(option)-1]
-
-	if option == "1" {
-		server.RunSRV()
-	} else {
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Print("enter srv IP and port (localhost:888): ")
-		ip, _ := reader.ReadString('\n')
-
-		ip = ip[:len(ip)-1]
-
-		client.Client(ip)
+		switch option {
+		case "1":
+			client.Client()
+		case "2":
+			go server.RunSRV()
+			time.Sleep(2 * time.Second)
+			client.Client()
+		case "3":
+			os.Exit(0)
+		default:
+			fmt.Println("invalid option")
+		}
 	}
 
-	/*
-		deck := NewDeck()
-		deck.Shuffle()
-
-		var dealer []Card
-		var player []Card
-		// Deal a couple of cards and print them as an example.
-		for i := 0; i < 2; i++ {
-			dealer = append(dealer, deck.Deal())
-			player = append(player, deck.Deal())
-		}
-
-		fmt.Printf("Dealer Hand: %s %s\n", dealer[0].Rank, dealer[0].Suit)
-
-		fmt.Println("Player Hand: ")
-		for _, card := range player {
-			fmt.Printf("%s %s ", card.Rank, card.Suit)
-		}
-		value, valueAce := cardValue(player)
-
-		fmt.Println("Value ", value)
-		if valueAce != 0 {
-			fmt.Println(valueAce)
-		}
-	*/
 }

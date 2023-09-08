@@ -8,57 +8,51 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-func login() {
-	fmt.Print("Enter your nickname: ")
+var (
+	conn *websocket.Conn
+)
 
-	userName := utils.GetUserInput()
+func login() {
+	var err error
+	ip := utils.GetUserInput("Enter server ip and port (localhost:888): ")
+	userName := utils.GetUserInput("Enter your nickname: ")
+
+	serverAddr := "ws://" + ip + "/ws"
+
+	conn, _, err = websocket.DefaultDialer.Dial(serverAddr, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = conn.WriteMessage(websocket.TextMessage, []byte(userName))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected to the server.")
 }
 
-func Client(ip string) {
-
-	serverAddr := "ws://" + ip + "/ws" // Change to your server's address
-	fmt.Println(serverAddr)
-
-	conn, _, err := websocket.DefaultDialer.Dial(serverAddr, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+func Client() {
 	defer conn.Close()
 
-	// Send the player's nickname to the server
-	err = conn.WriteMessage(websocket.TextMessage, []byte(nickname))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Connected to the server.")
-	fmt.Println("You can now send messages to the server.")
+	login()
 
 	// Start a goroutine to read and display messages from the server
 	go func() {
 		for {
-			_, message, err := conn.ReadMessage()
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
-			fmt.Println(string(message))
+			message := utils.GetServerMessage(conn)
+			fmt.Println(message)
 		}
 	}()
 
-	// Read user input and send it to the server
 	for {
-		message, _ := reader.ReadString('\n')
+		command := utils.GetUserInput("")
 
-		// Remove newline character from the input
-		message = message[:len(message)-1]
-
-		if message == "exit" {
+		if command == "exit" {
 			break
 		}
 
 		// Send the message to the server
-		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
+		err := conn.WriteMessage(websocket.TextMessage, []byte(command))
 		if err != nil {
 			log.Fatal(err)
 		}

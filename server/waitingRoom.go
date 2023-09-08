@@ -40,7 +40,6 @@ func JoinWaitingRoom(player *blackjack.Player) {
 				broadcast(message)
 
 			}
-
 			message = fmt.Sprintf("Player %s is ready\nWaiting for %d more player", player.Name, notReady)
 			broadcast(message)
 		}

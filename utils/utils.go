@@ -3,6 +3,7 @@ package utils
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -42,9 +43,19 @@ func GetMessageString(conn *websocket.Conn) (string, error) {
 	return message, nil
 }
 
-func GetUserInput() string {
+func GetUserInput(prompt string) string {
+	fmt.Print(prompt)
 	reader := bufio.NewReader(os.Stdin)
 	input, _ := reader.ReadString('\n')
 
 	return input[:len(input)-1]
+}
+
+func GetServerMessage(conn *websocket.Conn) string {
+	_, message, err := conn.ReadMessage()
+	if err != nil {
+		log.Fatal(err)
+		return ""
+	}
+	return string(message)
 }

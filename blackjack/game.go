@@ -53,17 +53,16 @@ func (g *Game) AddPlayer(player *Player) {
 	player.Cards = append(player.Cards, g.Deck.Deal())
 }
 
+/*
 func (g *Game) GetDealerHand() string {
 	message := fmt.Sprintln("Dealer hand:")
 
-	for _, card := g.DealerHand {
-
-	}
 }
 
 func (g *Game) GetHands() string {
-	
+
 	for _, player := range g.Players {
 
 	}
 }
+*/

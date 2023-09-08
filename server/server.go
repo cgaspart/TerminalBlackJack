@@ -28,6 +28,8 @@ var (
 func handleConnection(w http.ResponseWriter, r *http.Request) {
 	conn, playerName := login(w, r)
 
+	defer conn.Close()
+
 	log.Printf("New player connected with nickname: %s\n", playerName)
 
 	// Lock the connections map while adding the new connection
@@ -69,8 +71,9 @@ func RunSRV() {
 	http.HandleFunc("/ws", handleConnection)
 
 	port := 888
-	fmt.Printf("WebSocket server is running on :%d\n", port)
-	err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), nil)
+	server := fmt.Sprintf("0.0.0.0:%d", port)
+	fmt.Printf("WebSocket server is running on: %s\n", server)
+	err := http.ListenAndServe(server, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
