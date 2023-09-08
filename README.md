@@ -3,8 +3,8 @@
 Welcome to TerminalBlackJack, a classic blackjack game implemented in Golang and designed to be played directly in your terminal.
 
 ## Features
-* Basic blackjack game mechanics (hit, stand)
-* Client / Server using websocket
+* :white_check_mark: Client / Server using websocket
+* :o: Basic blackjack game mechanics (hit, stand)
 
 ## Getting Started
 
