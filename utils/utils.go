@@ -23,11 +23,13 @@ const (
 	// COLOR
 	RESET = "\033[0m"
 
-	RED       = "\033[31m"
-	GREEN     = "\033[32m"
-	YELLOW    = "\033[33m"
-	BLUE      = "\033[34m"
-	HIGHLIGHT = "\033[43;30m"
+	RED      = "\033[31m"
+	GREEN    = "\033[32m"
+	YELLOW   = "\033[33m"
+	BLUE     = "\033[34m"
+	HL_YELLO = "\033[43;30m"
+	HL_BLUE  = "\033[44;30m"
+	HL_GREEN = "\033[42;30m"
 )
 
 type Generic struct {

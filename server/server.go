@@ -41,7 +41,8 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 
 	// Main loop
 	for {
-		JoinWaitingRoom(connections[playerName])
+		game := JoinWaitingRoom(connections[playerName])
+		game.SendGame()
 	}
 
 	// Remove the connection from the connections map when the client disconnects

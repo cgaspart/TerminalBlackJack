@@ -1,6 +1,7 @@
 package blackjack
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/cgaspart/blackjack/utils"
@@ -8,9 +9,9 @@ import (
 )
 
 type Game struct {
-	Deck       *Deck
-	DealerHand []Card
-	Players    []*Player
+	Deck       *Deck     `json:"-"`
+	DealerHand []Card    `json:"dealer_hand"`
+	Players    []*Player `json:"player_list"`
 }
 
 func NewGame() *Game {
@@ -44,6 +45,41 @@ func (g *Game) InitBet(player *Player) {
 
 }
 
+func (g *Game) PrintDealerHand() {
+	val1, val2 := CardValue(g.DealerHand)
+	fmt.Printf(`
+	
+%s DEALER %s
+VALUE: %d`, utils.HL_GREEN, utils.RESET, val1)
+	if val2 != 0 {
+		fmt.Print("/", val2)
+	}
+
+	PrintCards(g.DealerHand)
+}
+
+func (g *Game) PrintGame(currentPlayer *Player) {
+	g.PrintDealerHand()
+
+	for _, player := range g.Players {
+		if player.Name != currentPlayer.Name {
+			player.PrintHand(false)
+		}
+	}
+	currentPlayer.PrintHand(true)
+}
+
+func (g *Game) SendGame() {
+	message := utils.Data{
+		Type: utils.GAME,
+		Data: g,
+	}
+
+	for _, player := range g.Players {
+		utils.SendData(player.Conn, message)
+	}
+}
+
 func (g *Game) AddPlayer(player *Player) {
 	g.InitBet(player)
 
@@ -51,4 +87,14 @@ func (g *Game) AddPlayer(player *Player) {
 
 	player.Hand = append(player.Hand, g.Deck.Deal())
 	player.Hand = append(player.Hand, g.Deck.Deal())
+}
+
+func GetGame(data []byte) (*Game, error) {
+	game := Game{}
+
+	if err := json.Unmarshal(data, &game); err != nil {
+		return nil, err
+	}
+
+	return &game, nil
 }

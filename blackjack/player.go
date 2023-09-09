@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/cgaspart/blackjack/utils"
 	"github.com/gorilla/websocket"
@@ -46,37 +45,22 @@ func (p *Player) Betting(amount float32) error {
 	return nil
 }
 
-func (p *Player) PrintHand() {
+func (p *Player) PrintHand(me bool) {
+	HLColor := utils.HL_YELLO
+
+	if me {
+		HLColor = utils.HL_BLUE
+	}
 	val1, val2 := CardValue(p.Hand)
 	fmt.Printf(`
 	
   %s %s %s
-value: %d`, utils.HIGHLIGHT, p.Name, utils.RESET, val1)
+value: %d`, HLColor, p.Name, utils.RESET, val1)
 	if val2 != 0 {
 		fmt.Print("/", val2)
 	}
 
-	maxRows := 0
-	for _, card := range p.Hand {
-		lines := strings.Split(card.CardArt, "\n")
-		if len(lines) > maxRows {
-			maxRows = len(lines)
-		}
-	}
-
-	grid := make([]string, maxRows)
-
-	// Populate the grid with the card arts
-	for _, card := range p.Hand {
-		lines := strings.Split(card.CardArt, "\n")
-		for i, line := range lines {
-			grid[i] += line
-		}
-	}
-
-	for _, row := range grid {
-		fmt.Println(row)
-	}
+	PrintCards(p.Hand)
 
 	fmt.Printf(`
 .-------------------.

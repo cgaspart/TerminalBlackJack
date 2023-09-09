@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -86,4 +87,28 @@ func CardValue(deck []Card) (int, int) {
 	}
 
 	return value, 0
+}
+
+func PrintCards(cards []Card) {
+	maxRows := 0
+	for _, card := range cards {
+		lines := strings.Split(card.CardArt, "\n")
+		if len(lines) > maxRows {
+			maxRows = len(lines)
+		}
+	}
+
+	grid := make([]string, maxRows)
+
+	// Populate the grid with the card arts
+	for _, card := range cards {
+		lines := strings.Split(card.CardArt, "\n")
+		for i, line := range lines {
+			grid[i] += line
+		}
+	}
+
+	for _, row := range grid {
+		fmt.Println(row)
+	}
 }

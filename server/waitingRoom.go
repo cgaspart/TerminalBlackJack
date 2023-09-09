@@ -19,7 +19,7 @@ func countPlayerNotReady() int {
 	return notReady
 }
 
-func JoinWaitingRoom(player *blackjack.Player) {
+func JoinWaitingRoom(player *blackjack.Player) *blackjack.Game {
 	for {
 		game := blackjack.NewGame()
 
@@ -40,9 +40,11 @@ func JoinWaitingRoom(player *blackjack.Player) {
 			if notReady == 0 {
 				message := "All players ready\nLaunching a new game..."
 				broadcast(message)
+				return game
 			}
 			message = fmt.Sprintf("Player %s is ready\nWaiting for %d more player", player.Name, notReady)
 			broadcast(message)
 		}
 	}
+	return nil
 }

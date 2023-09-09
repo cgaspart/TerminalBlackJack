@@ -50,7 +50,13 @@ func handleServerData(message []byte) error {
 			log.Fatal(err)
 			return err
 		}
-		Player.PrintHand()
+	case utils.GAME:
+		Game, err = blackjack.GetGame(srvData.Data)
+		if err != nil {
+			log.Fatal(err)
+			return err
+		}
+		Game.PrintGame(Player)
 	}
 	return nil
 }
@@ -79,13 +85,26 @@ func Client() {
 		}
 	}()
 
+loop:
 	for {
 		command := utils.GetUserInput("")
 
-		if command == "exit" {
-			break
+		switch command {
+		case "exit":
+			break loop
+		case "/me":
+			if Player != nil {
+				Player.PrintHand(true)
+			} else {
+				fmt.Println("no hand found")
+			}
+		case "/dealer":
+			if Game != nil {
+				Game.PrintDealerHand()
+			} else {
+				fmt.Println("no game found")
+			}
 		}
-
 		err := conn.WriteMessage(websocket.TextMessage, []byte(command))
 		if err != nil {
 			log.Fatal(err)
