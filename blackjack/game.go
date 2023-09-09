@@ -49,20 +49,6 @@ func (g *Game) AddPlayer(player *Player) {
 
 	g.Players = append(g.Players, player)
 
-	player.Cards = append(player.Cards, g.Deck.Deal())
-	player.Cards = append(player.Cards, g.Deck.Deal())
+	player.Hand = append(player.Hand, g.Deck.Deal())
+	player.Hand = append(player.Hand, g.Deck.Deal())
 }
-
-/*
-func (g *Game) GetDealerHand() string {
-	message := fmt.Sprintln("Dealer hand:")
-
-}
-
-func (g *Game) GetHands() string {
-
-	for _, player := range g.Players {
-
-	}
-}
-*/

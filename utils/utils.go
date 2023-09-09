@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -14,6 +15,35 @@ import (
 var (
 	ErrWrongNumber = errors.New("invalid number")
 )
+
+const (
+	PLAYER = "PLAYER"
+	GAME   = "GAME"
+)
+
+type Generic struct {
+	Type string          `json:"type"`
+	Data json.RawMessage `json:"data"`
+}
+
+type Data struct {
+	Type string      `json:"type"`
+	Data interface{} `json:"data"`
+}
+
+func SendData(conn *websocket.Conn, message Data) error {
+	data, err := json.Marshal(message)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = conn.WriteMessage(websocket.BinaryMessage, data)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 func GetMessageInt(conn *websocket.Conn) (int, error) {
 	_, p, err := conn.ReadMessage()
@@ -49,13 +79,4 @@ func GetUserInput(prompt string) string {
 	input, _ := reader.ReadString('\n')
 
 	return input[:len(input)-1]
-}
-
-func GetServerMessage(conn *websocket.Conn) string {
-	_, message, err := conn.ReadMessage()
-	if err != nil {
-		log.Fatal(err)
-		return ""
-	}
-	return string(message)
 }

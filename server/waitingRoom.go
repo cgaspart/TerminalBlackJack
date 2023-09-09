@@ -34,11 +34,12 @@ func JoinWaitingRoom(player *blackjack.Player) {
 
 			game.AddPlayer(player)
 
+			player.SendPlayer()
+
 			notReady := countPlayerNotReady()
 			if notReady == 0 {
 				message := "All players ready\nLaunching a new game..."
 				broadcast(message)
-
 			}
 			message = fmt.Sprintf("Player %s is ready\nWaiting for %d more player", player.Name, notReady)
 			broadcast(message)

@@ -27,9 +27,9 @@ func NewDeck() *Deck {
 			card := Card{Suit: suit, Rank: rank}
 			card.CardArt = fmt.Sprintf(`
 		  .------.
+		  |%s   %s |
+		  |      |
 		  |%s    %s|
-		  |       |
-		  |   %s  %s|
 		  '------'`, rank, suit, suit, rank)
 			deck.Cards = append(deck.Cards, card)
 		}
@@ -47,15 +47,15 @@ func (d *Deck) Shuffle() {
 
 func (d *Deck) Deal() Card {
 	if len(d.Cards) == 0 {
-		return Card{} // Return an empty card if the deck is empty.
+		return Card{}
 	}
 
-	// Remove and return the first card from the deck.
 	card := d.Cards[0]
 	d.Cards = d.Cards[1:]
 	return card
 }
 
+// EDIT FOR CLIENT SIDE PRINT
 func printHand(hand []Card) string {
 	var message string
 
@@ -66,7 +66,7 @@ func printHand(hand []Card) string {
 	return message
 }
 
-func cardValue(deck []Card) (int, int) {
+func CardValue(deck []Card) (int, int) {
 	var value int
 	ace := false
 

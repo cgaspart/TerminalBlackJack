@@ -21,8 +21,6 @@ var (
 	}
 	connections   = make(map[string]*blackjack.Player) // Map of WebSocket connections to player nicknames
 	connectionsMu sync.Mutex                           // Mutex to protect the connections map
-	inGame        = false
-	game          *blackjack.Game
 )
 
 func handleConnection(w http.ResponseWriter, r *http.Request) {

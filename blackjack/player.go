@@ -1,8 +1,10 @@
 package blackjack
 
 import (
+	"encoding/json"
 	"errors"
 
+	"github.com/cgaspart/blackjack/utils"
 	"github.com/gorilla/websocket"
 )
 
@@ -11,12 +13,12 @@ var (
 )
 
 type Player struct {
-	Conn    *websocket.Conn
-	Name    string
-	Cards   []Card
-	Bet     float32
-	Balance float32
-	Ready   bool
+	Conn    *websocket.Conn `json:"-"`
+	Name    string          `json:"name"`
+	Hand    []Card          `json:"hand"`
+	Bet     float32         `json:"bet"`
+	Balance float32         `json:"balance"`
+	Ready   bool            `json:"ready"`
 }
 
 func NewPlayer(nick string, balance float32, con *websocket.Conn) *Player {
@@ -38,5 +40,25 @@ func (p *Player) Betting(amount float32) error {
 	}
 
 	p.Bet = amount
+	p.Balance = p.Balance - p.Bet
 	return nil
+}
+
+func (p *Player) SendPlayer() error {
+	message := utils.Data{
+		Type: utils.PLAYER,
+		Data: p,
+	}
+
+	return utils.SendData(p.Conn, message)
+}
+
+func GetPlayer(data []byte) (*Player, error) {
+	player := Player{}
+
+	if err := json.Unmarshal(data, &player); err != nil {
+		return nil, err
+	}
+
+	return &player, nil
 }
