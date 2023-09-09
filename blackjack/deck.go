@@ -25,12 +25,21 @@ func NewDeck() *Deck {
 	for _, suit := range suits {
 		for _, rank := range ranks {
 			card := Card{Suit: suit, Rank: rank}
-			card.CardArt = fmt.Sprintf(`
-		  .------.
-		  |%s   %s |
-		  |      |
-		  |%s    %s|
-		  '------'`, rank, suit, suit, rank)
+			if rank != "10" {
+				card.CardArt = fmt.Sprintf(`
+.------.
+|%s   %s |
+|      |
+|%s    %s|
+'------'`, rank, suit, suit, rank)
+			} else {
+				card.CardArt = fmt.Sprintf(`
+.------.
+|%s  %s |
+|      |
+|%s   %s|
+'------'`, rank, suit, suit, rank)
+			}
 			deck.Cards = append(deck.Cards, card)
 		}
 	}
@@ -53,17 +62,6 @@ func (d *Deck) Deal() Card {
 	card := d.Cards[0]
 	d.Cards = d.Cards[1:]
 	return card
-}
-
-// EDIT FOR CLIENT SIDE PRINT
-func printHand(hand []Card) string {
-	var message string
-
-	for _, card := range hand {
-		message = message + fmt.Sprintln(card.CardArt)
-	}
-
-	return message
 }
 
 func CardValue(deck []Card) (int, int) {

@@ -50,7 +50,7 @@ func handleServerData(message []byte) error {
 			log.Fatal(err)
 			return err
 		}
-		fmt.Println("PLAYER: ", Player)
+		Player.PrintHand()
 	}
 	return nil
 }

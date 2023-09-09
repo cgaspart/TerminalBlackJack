@@ -3,6 +3,8 @@ package blackjack
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/cgaspart/blackjack/utils"
 	"github.com/gorilla/websocket"
@@ -42,6 +44,46 @@ func (p *Player) Betting(amount float32) error {
 	p.Bet = amount
 	p.Balance = p.Balance - p.Bet
 	return nil
+}
+
+func (p *Player) PrintHand() {
+	val1, val2 := CardValue(p.Hand)
+	fmt.Printf(`
+	
+  %s %s %s
+value: %d`, utils.HIGHLIGHT, p.Name, utils.RESET, val1)
+	if val2 != 0 {
+		fmt.Print("/", val2)
+	}
+
+	maxRows := 0
+	for _, card := range p.Hand {
+		lines := strings.Split(card.CardArt, "\n")
+		if len(lines) > maxRows {
+			maxRows = len(lines)
+		}
+	}
+
+	grid := make([]string, maxRows)
+
+	// Populate the grid with the card arts
+	for _, card := range p.Hand {
+		lines := strings.Split(card.CardArt, "\n")
+		for i, line := range lines {
+			grid[i] += line
+		}
+	}
+
+	for _, row := range grid {
+		fmt.Println(row)
+	}
+
+	fmt.Printf(`
+.-------------------.
+| %s Bet: %s%.2f%s     |
+| %s Balance: %s%.2f%s |
+'-------------------'
+`, p.Name, utils.BLUE, p.Bet, utils.RESET, p.Name, utils.GREEN, p.Balance, utils.RESET)
 }
 
 func (p *Player) SendPlayer() error {

@@ -25,7 +25,7 @@ func NewGame() *Game {
 
 func (g *Game) InitBet(player *Player) {
 	for {
-		message := fmt.Sprintf("Enter a bet amount\n Your blance is: %.2f", player.Balance)
+		message := fmt.Sprintf("Enter a bet amount\nYour blance is: %.2f", player.Balance)
 
 		player.Conn.WriteMessage(websocket.TextMessage, []byte(message))
 

@@ -14,7 +14,6 @@ func login(w http.ResponseWriter, r *http.Request) (*websocket.Conn, string) {
 		return nil, ""
 	}
 
-	// Read the player's nickname
 	_, nickname, err := conn.ReadMessage()
 	if err != nil {
 		log.Println(err)
