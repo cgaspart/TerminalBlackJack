@@ -7,7 +7,7 @@ Welcome to TerminalBlackJack, a classic blackjack game implemented in Golang and
 * :o: Basic blackjack game mechanics (hit, stand)
 
 ## ScreenShots
-![Alt Text](https://github.com/cgaspart/TerminalBlackJack/raw/main/screenshots/screen1.png)
+<img src="https://github.com/cgaspart/TerminalBlackJack/raw/main/screenshots/screen1.png" width="400">
 
 ## Getting Started
 
