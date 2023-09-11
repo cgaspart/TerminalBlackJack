@@ -17,6 +17,7 @@ type Player struct {
 	Conn    *websocket.Conn `json:"-"`
 	Name    string          `json:"name"`
 	Hand    []Card          `json:"hand"`
+	Bust    bool            `json:"bust"`
 	Bet     float32         `json:"bet"`
 	Balance float32         `json:"balance"`
 	Ready   bool            `json:"ready"`
@@ -26,12 +27,29 @@ func NewPlayer(nick string, balance float32, con *websocket.Conn) *Player {
 	player := &Player{
 		Conn:    con,
 		Name:    nick,
+		Bust:    false,
 		Bet:     0,
 		Balance: balance,
 		Ready:   false,
 	}
 
 	return player
+}
+
+func (p *Player) Hit(game *Game) (bool, bool) {
+	p.Hand = append(p.Hand, game.Deck.Deal())
+
+	val1, val2 := CardValue(p.Hand)
+	if val2 == 0 && val1 > 21 {
+		p.Bust = true
+		return true, false
+	}
+
+	if val1 == 21 {
+		return false, true
+	}
+
+	return false, false
 }
 
 func (p *Player) Betting(amount float32) error {

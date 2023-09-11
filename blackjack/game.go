@@ -45,6 +45,20 @@ func (g *Game) InitBet(player *Player) {
 
 }
 
+func (g *Game) DealerTurn() bool {
+	for {
+		g.DealerHand = append(g.DealerHand, g.Deck.Deal())
+
+		val1, val2 := CardValue(g.DealerHand)
+		if val2 == 0 && val1 > 21 {
+			return true
+		}
+		if val1 >= 17 {
+			return false
+		}
+	}
+}
+
 func (g *Game) PrintDealerHand() {
 	val1, val2 := CardValue(g.DealerHand)
 	fmt.Printf(`
@@ -64,9 +78,10 @@ func (g *Game) PrintGame(currentPlayer *Player) {
 	for _, player := range g.Players {
 		if player.Name != currentPlayer.Name {
 			player.PrintHand(false)
+		} else {
+			player.PrintHand(true)
 		}
 	}
-	currentPlayer.PrintHand(true)
 }
 
 func (g *Game) SendGame() {

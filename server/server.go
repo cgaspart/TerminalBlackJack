@@ -42,6 +42,7 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 	// Main loop
 	for {
 		game := JoinWaitingRoom(connections[playerName])
+		PlayerGameLoop(game)
 		game.SendGame()
 	}
 
